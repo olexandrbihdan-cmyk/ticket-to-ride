@@ -1,0 +1,121 @@
+// Маршрути Європи: з'єднання між містами
+// type: 'normal' | 'tunnel' | 'ferry'
+// ferryCount: кількість локомотивів для порому
+// double: true якщо є подвійний маршрут (для 2+ гравців доступний лише при 4 гравцях)
+const routes = [
+  // Великобританія та зв'язки
+  { id: 1, from: "Едінбург", to: "Лондон", length: 4, color: "orange", type: "normal" },
+  { id: 2, from: "Едінбург", to: "Лондон", length: 4, color: "black", type: "normal", double: true },
+  { id: 3, from: "Лондон", to: "Діепп", length: 2, color: "any", type: "ferry", ferryCount: 1 },
+  { id: 4, from: "Лондон", to: "Діепп", length: 2, color: "any", type: "ferry", ferryCount: 1, double: true },
+  { id: 5, from: "Лондон", to: "Амстердам", length: 2, color: "any", type: "ferry", ferryCount: 2 },
+
+  // Скандинавія
+  { id: 6, from: "Осло", to: "Стокгольм", length: 3, color: "any", type: "normal" },
+  { id: 7, from: "Осло", to: "Стокгольм", length: 3, color: "any", type: "normal", double: true },
+  { id: 8, from: "Стокгольм", to: "Копенгаген", length: 3, color: "any", type: "normal" },
+  { id: 9, from: "Стокгольм", to: "Петроград", length: 8, color: "any", type: "tunnel" },
+  { id: 10, from: "Осло", to: "Копенгаген", length: 2, color: "any", type: "ferry", ferryCount: 1 },
+  { id: 11, from: "Копенгаген", to: "Гамбург", length: 2, color: "any", type: "ferry", ferryCount: 1 },
+
+  // Німеччина та Бенілюкс
+  { id: 12, from: "Амстердам", to: "Брюссель", length: 1, color: "black", type: "normal" },
+  { id: 13, from: "Амстердам", to: "Ессен", length: 3, color: "yellow", type: "normal" },
+  { id: 14, from: "Амстердам", to: "Франкфурт", length: 2, color: "white", type: "normal" },
+  { id: 15, from: "Брюссель", to: "Франкфурт", length: 2, color: "blue", type: "normal" },
+  { id: 16, from: "Брюссель", to: "Париж", length: 2, color: "yellow", type: "normal" },
+  { id: 17, from: "Брюссель", to: "Париж", length: 2, color: "red", type: "normal", double: true },
+  { id: 18, from: "Ессен", to: "Франкфурт", length: 2, color: "green", type: "normal" },
+  { id: 19, from: "Франкфурт", to: "Мюнхен", length: 2, color: "pink", type: "normal" },
+  { id: 20, from: "Франкфурт", to: "Берлін", length: 3, color: "black", type: "normal" },
+  { id: 21, from: "Франкфурт", to: "Берлін", length: 3, color: "red", type: "normal", double: true },
+  { id: 22, from: "Ессен", to: "Берлін", length: 2, color: "blue", type: "normal" },
+  { id: 23, from: "Гамбург", to: "Берлін", length: 2, color: "any", type: "normal" },
+  { id: 24, from: "Гамбург", to: "Берлін", length: 2, color: "any", type: "normal", double: true },
+  { id: 25, from: "Ессен", to: "Копенгаген", length: 3, color: "any", type: "ferry", ferryCount: 1 },
+  { id: 26, from: "Гамбург", to: "Данціг", length: 2, color: "any", type: "normal" },
+
+  // Франція та Іспанія
+  { id: 27, from: "Діепп", to: "Париж", length: 1, color: "pink", type: "normal" },
+  { id: 28, from: "Діепп", to: "Брест", length: 2, color: "orange", type: "normal" },
+  { id: 29, from: "Брест", to: "Париж", length: 3, color: "black", type: "normal" },
+  { id: 30, from: "Брест", to: "Памплона", length: 4, color: "pink", type: "normal" },
+  { id: 31, from: "Париж", to: "Памплона", length: 4, color: "blue", type: "normal" },
+  { id: 32, from: "Париж", to: "Памплона", length: 4, color: "green", type: "normal", double: true },
+  { id: 33, from: "Париж", to: "Марсель", length: 4, color: "any", type: "normal" },
+  { id: 34, from: "Париж", to: "Цюріх", length: 3, color: "any", type: "tunnel" },
+  { id: 35, from: "Памплона", to: "Мадрид", length: 3, color: "any", type: "tunnel" },
+  { id: 36, from: "Памплона", to: "Мадрид", length: 3, color: "any", type: "tunnel", double: true },
+  { id: 37, from: "Памплона", to: "Барселона", length: 2, color: "any", type: "tunnel" },
+  { id: 38, from: "Памплона", to: "Марсель", length: 4, color: "red", type: "normal" },
+  { id: 39, from: "Мадрид", to: "Лісабон", length: 3, color: "pink", type: "normal" },
+  { id: 40, from: "Мадрид", to: "Кадіс", length: 3, color: "orange", type: "normal" },
+  { id: 41, from: "Мадрид", to: "Барселона", length: 2, color: "yellow", type: "normal" },
+  { id: 42, from: "Лісабон", to: "Кадіс", length: 2, color: "blue", type: "normal" },
+  { id: 43, from: "Барселона", to: "Марсель", length: 4, color: "any", type: "normal" },
+
+  // Швейцарія, Австрія, Італія
+  { id: 44, from: "Марсель", to: "Цюріх", length: 2, color: "pink", type: "tunnel" },
+  { id: 45, from: "Цюріх", to: "Мюнхен", length: 2, color: "yellow", type: "tunnel" },
+  { id: 46, from: "Цюріх", to: "Венеція", length: 2, color: "green", type: "tunnel" },
+  { id: 47, from: "Мюнхен", to: "Венеція", length: 2, color: "blue", type: "tunnel" },
+  { id: 48, from: "Мюнхен", to: "Відень", length: 3, color: "orange", type: "normal" },
+  { id: 49, from: "Венеція", to: "Загреб", length: 2, color: "any", type: "normal" },
+  { id: 50, from: "Венеція", to: "Рим", length: 2, color: "black", type: "normal" },
+  { id: 51, from: "Рим", to: "Палермо", length: 4, color: "any", type: "ferry", ferryCount: 1 },
+  { id: 52, from: "Рим", to: "Бріндізі", length: 2, color: "white", type: "normal" },
+  { id: 53, from: "Палермо", to: "Бріндізі", length: 3, color: "any", type: "ferry", ferryCount: 1 },
+  { id: 54, from: "Палермо", to: "Смірна", length: 6, color: "any", type: "ferry", ferryCount: 2 },
+  { id: 55, from: "Бріндізі", to: "Афіни", length: 4, color: "any", type: "ferry", ferryCount: 1 },
+
+  // Східна Європа
+  { id: 56, from: "Берлін", to: "Данціг", length: 4, color: "any", type: "normal" },
+  { id: 57, from: "Берлін", to: "Варшава", length: 4, color: "pink", type: "normal" },
+  { id: 58, from: "Берлін", to: "Варшава", length: 4, color: "yellow", type: "normal", double: true },
+  { id: 59, from: "Берлін", to: "Відень", length: 3, color: "green", type: "normal" },
+  { id: 60, from: "Данціг", to: "Варшава", length: 2, color: "any", type: "normal" },
+  { id: 61, from: "Данціг", to: "Рига", length: 3, color: "black", type: "normal" },
+  { id: 62, from: "Варшава", to: "Вільно", length: 3, color: "red", type: "normal" },
+  { id: 63, from: "Варшава", to: "Київ", length: 4, color: "any", type: "normal" },
+  { id: 64, from: "Відень", to: "Будапешт", length: 1, color: "white", type: "normal" },
+  { id: 65, from: "Відень", to: "Будапешт", length: 1, color: "red", type: "normal", double: true },
+  { id: 66, from: "Відень", to: "Загреб", length: 2, color: "any", type: "normal" },
+  { id: 67, from: "Будапешт", to: "Загреб", length: 2, color: "orange", type: "normal" },
+  { id: 68, from: "Будапешт", to: "Бухарест", length: 4, color: "any", type: "tunnel" },
+  { id: 69, from: "Будапешт", to: "Сараєво", length: 3, color: "pink", type: "normal" },
+  { id: 70, from: "Будапешт", to: "Київ", length: 6, color: "any", type: "normal" },
+  { id: 71, from: "Загреб", to: "Сараєво", length: 3, color: "red", type: "normal" },
+
+  // Балкани та Туреччина
+  { id: 72, from: "Сараєво", to: "Софія", length: 2, color: "any", type: "tunnel" },
+  { id: 73, from: "Сараєво", to: "Афіни", length: 4, color: "green", type: "normal" },
+  { id: 74, from: "Софія", to: "Бухарест", length: 2, color: "any", type: "tunnel" },
+  { id: 75, from: "Софія", to: "Константинополь", length: 3, color: "blue", type: "normal" },
+  { id: 76, from: "Софія", to: "Афіни", length: 3, color: "pink", type: "normal" },
+  { id: 77, from: "Бухарест", to: "Константинополь", length: 3, color: "yellow", type: "normal" },
+  { id: 78, from: "Константинополь", to: "Ангора", length: 2, color: "any", type: "tunnel" },
+  { id: 79, from: "Константинополь", to: "Смірна", length: 2, color: "any", type: "tunnel" },
+  { id: 80, from: "Афіни", to: "Смірна", length: 2, color: "any", type: "ferry", ferryCount: 1 },
+  { id: 81, from: "Ангора", to: "Смірна", length: 3, color: "orange", type: "normal" },
+  { id: 82, from: "Константинополь", to: "Севастополь", length: 4, color: "any", type: "ferry", ferryCount: 2 },
+
+  // Росія та Україна
+  { id: 83, from: "Рига", to: "Вільно", length: 2, color: "green", type: "normal" },
+  { id: 84, from: "Рига", to: "Петроград", length: 4, color: "any", type: "normal" },
+  { id: 85, from: "Вільно", to: "Петроград", length: 4, color: "blue", type: "normal" },
+  { id: 86, from: "Вільно", to: "Київ", length: 2, color: "any", type: "normal" },
+  { id: 87, from: "Петроград", to: "Москва", length: 4, color: "white", type: "normal" },
+  { id: 88, from: "Москва", to: "Харків", length: 4, color: "any", type: "normal" },
+  { id: 89, from: "Москва", to: "Ростов", length: 4, color: "green", type: "normal" },
+  { id: 90, from: "Київ", to: "Харків", length: 4, color: "any", type: "normal" },
+  { id: 91, from: "Харків", to: "Ростов", length: 2, color: "green", type: "normal" },
+  { id: 92, from: "Ростов", to: "Севастополь", length: 4, color: "any", type: "normal" },
+  { id: 93, from: "Ростов", to: "Сочі", length: 2, color: "any", type: "normal" },
+  { id: 94, from: "Сочі", to: "Севастополь", length: 2, color: "any", type: "ferry", ferryCount: 1 },
+  { id: 95, from: "Сочі", to: "Єреван", length: 3, color: "any", type: "normal" },
+  { id: 96, from: "Ангора", to: "Єреван", length: 3, color: "any", type: "normal" },
+  { id: 97, from: "Бухарест", to: "Київ", length: 4, color: "any", type: "normal" },
+  { id: 98, from: "Севастополь", to: "Бухарест", length: 4, color: "white", type: "normal" },
+];
+
+module.exports = routes;
